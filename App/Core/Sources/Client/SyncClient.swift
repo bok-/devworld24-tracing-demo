@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import AsyncHTTPClient
 import Cache
@@ -150,7 +162,7 @@ private func withDetachedSpan<T>(
     }
 
     return try await withTaskCancellationHandler {
-        return try await task.value
+        try await task.value
     } onCancel: {
         task.cancel()
     }

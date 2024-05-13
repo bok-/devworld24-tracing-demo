@@ -71,7 +71,7 @@ let package = Package(
         ),
         .target(
             name: "Utilities"
-        )
+        ),
     ]
 
 )

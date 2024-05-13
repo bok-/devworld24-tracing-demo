@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import AsyncHTTPClient
 import Foundation
@@ -113,11 +125,11 @@ actor BokBankClient {
         )
     }
 
-    func post<Request, Response>(
+    func post<Response>(
         _ path: String,
-        request body: Request,
+        request body: some Encodable,
         timeout: TimeAmount = .seconds(30)
-    ) async throws -> Response where Request: Encodable, Response: Decodable {
+    ) async throws -> Response where Response: Decodable {
         var encoded = ByteBuffer()
         try encoded.writeJSONEncodable(body)
         return try await execute(

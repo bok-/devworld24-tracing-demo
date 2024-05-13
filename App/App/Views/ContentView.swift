@@ -1,9 +1,15 @@
+//===----------------------------------------------------------------------===//
 //
-//  ContentView.swift
-//  BokBank
+// This source file is part of a technology demo for /dev/world 2024.
 //
-//  Created by Rob Amos on 4/5/2024.
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Core
 import SwiftUI
@@ -37,7 +43,7 @@ struct ContentView: View {
                     }
                 }
                 .padding([ .top, .bottom ], 100)
-                .frame(maxWidth: .infinity, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                .frame(maxWidth: .infinity, maxHeight: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
             }
             if let transactions = viewModel.transactions {
                 ResultView(transactions) { transactionGroups in
@@ -55,13 +61,13 @@ struct ContentView: View {
                                         transaction: transaction,
                                         merchant: {
                                             if
-                                                case .card(let card) = transaction.details,
-                                                case .success(let merchants) = viewModel.merchants
+                                                case let .card(card) = transaction.details,
+                                                case let .success(merchants) = viewModel.merchants
                                             {
-                                                return merchants.first(where: { $0.id == card.merchantID })
+                                                merchants.first(where: { $0.id == card.merchantID })
 
                                             } else {
-                                                return nil
+                                                nil
                                             }
                                         }()
                                     )
@@ -71,7 +77,7 @@ struct ContentView: View {
                     }
                 }
             }
-            
+
         }
         .listStyle(.plain)
         .sheet(item: $transferAccounts) { accounts in
@@ -133,7 +139,7 @@ struct ContentView: View {
                 .makePreviewIncomingTransfer(),
             ],
             merchants: [
-                .makePreviewWoolworths()
+                .makePreviewWoolworths(),
             ]
         )
     )

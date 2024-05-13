@@ -1,9 +1,15 @@
+//===----------------------------------------------------------------------===//
 //
-//  TransferForm.swift
-//  BokBank
+// This source file is part of a technology demo for /dev/world 2024.
 //
-//  Created by Rob Amos on 7/5/2024.
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Core
 import SwiftUI
@@ -92,8 +98,7 @@ struct TransferForm: View {
                 }
             }
 
-            Section {
-            } footer: {
+            Section {} footer: {
                 AsyncButton {
                     try await withSpan("Tapped Transfer Now") { _ in
                         do {
@@ -122,7 +127,6 @@ struct TransferForm: View {
 
         .navigationTitle("Transfer")
         .interactiveDismissDisabled(disableDismiss)
-
         .navigationDestination(item: $transferReceipt) { receipt in
             TransferReceipt(receipt: receipt, isPresented: $isPresented)
         }
@@ -143,10 +147,10 @@ struct PrimaryButtonStyle: ButtonStyle {
 
 // MARK: - Previews
 
-//#Preview {
+// #Preview {
 //    TransferForm(
 //        sourceAccount: .makePreviewTransactingAccount(),
 //        targetAccount: .makePreviewSavingsAccount(),
 //        amount: 10
 //    )
-//}
+// }

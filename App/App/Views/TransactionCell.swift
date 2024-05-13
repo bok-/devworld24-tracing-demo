@@ -1,9 +1,15 @@
+//===----------------------------------------------------------------------===//
 //
-//  TransactionCell.swift
-//  BokBank
+// This source file is part of a technology demo for /dev/world 2024.
 //
-//  Created by Rob Amos on 6/5/2024.
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Core
 import Foundation
@@ -16,9 +22,9 @@ struct TransactionCell: View {
 
     var isTransfer: Bool {
         if case .transfer = transaction.details {
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
@@ -48,7 +54,7 @@ struct TransactionCell: View {
                             Text(transaction.description)
                                 .lineLimit(1)
 
-                        case .payment(let paymentDetails):
+                        case let .payment(paymentDetails):
                             if paymentDetails.toAccount == transaction.accountID {
                                 Text("Payment received from \(paymentDetails.fromAccount)")
                                     .lineLimit(1)
@@ -57,7 +63,7 @@ struct TransactionCell: View {
                                     .lineLimit(1)
                             }
 
-                        case .transfer(let transferDetails):
+                        case let .transfer(transferDetails):
                             if transferDetails.toAccount == transaction.accountID {
                                 Text("Transfer from \(transferDetails.fromAccount)")
                                     .lineLimit(1)

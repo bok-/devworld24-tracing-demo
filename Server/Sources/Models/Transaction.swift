@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Foundation
 import OTel
@@ -33,7 +45,7 @@ public struct Transaction: Codable, Hashable, Identifiable, Sendable {
     public let updatedBy: OTelSpanContext?
 
     // MARK: - Initialisation
-    
+
     /// Memberwise initialiser for a card-based transaction
     public init(id: String, accountID: Account.ID, instant: Date, cardDetails: CardDetails, amount: Money, category: String, description: String, updatedBy: OTelSpanContext?) {
         self.id = id

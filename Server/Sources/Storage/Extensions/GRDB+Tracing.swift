@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Foundation
 import GRDB
@@ -11,7 +23,7 @@ func makeGRDBTraceFunction() -> (Database.TraceEvent) -> Void {
     { event in
         // Unless it includes timing we can't create a span
         guard
-            case .profile(let statement, let duration) = event,
+            case let .profile(statement, duration) = event,
             let operationName = statement.sql.sqlOperation
         else {
             return
@@ -47,7 +59,7 @@ private extension String {
     // the table name though, that would be very error-prone. There is probably something we could do here
     // with DatabaseRegionObserving but that can be a stretch goal.
     var sqlOperation: String? {
-        let statement = self.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        let statement = uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
         // A rough attempt to represent the SQL language operations as supported by SQLite:
         // https://www.sqlite.org/lang.html

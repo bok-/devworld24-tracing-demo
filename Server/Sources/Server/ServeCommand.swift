@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import ArgumentParser
 import HTTPTypes
@@ -21,14 +33,11 @@ struct ServeCommand: AsyncParsableCommand {
 
     // MARK: - Arguments
 
-    @Option(name: .shortAndLong, help: "The hostname to listen on. Defaults to 127.0.0.1 (IPv4)")
-    var host = "127.0.0.1"
+    @Option(name: .shortAndLong, help: "The hostname to listen on. Defaults to 127.0.0.1 (IPv4)") var host = "127.0.0.1"
 
-    @Option(name: .shortAndLong, help: "The port number to listen on. Defaults to 2265.")
-    var port = 2265
+    @Option(name: .shortAndLong, help: "The port number to listen on. Defaults to 2265.") var port = 2265
 
-    @Flag(name: .shortAndLong, help: "Enables more verbose logging")
-    var verbose = false
+    @Flag(name: .shortAndLong, help: "Enables more verbose logging") var verbose = false
 
 
     // MARK: - Validation
@@ -86,8 +95,8 @@ struct ServeCommand: AsyncParsableCommand {
 
         let group = MultiThreadedEventLoopGroup(numberOfThreads: 2)
 
-        let exporter = OTLPGRPCSpanExporter(
-            configuration: try .init(
+        let exporter = try OTLPGRPCSpanExporter(
+            configuration: .init(
                 environment: .detected(),
                 shouldUseAnInsecureConnection: true
             ),
@@ -104,7 +113,7 @@ struct ServeCommand: AsyncParsableCommand {
             processor: processor,
             environment: .detected(),
             resource: .init(attributes: [
-                "service.name": "bokbank.server"
+                "service.name": "bokbank.server",
             ])
         )
 

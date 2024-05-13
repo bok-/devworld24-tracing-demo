@@ -1,9 +1,15 @@
+//===----------------------------------------------------------------------===//
 //
-//  ContentViewModel.swift
-//  BokBank
+// This source file is part of a technology demo for /dev/world 2024.
 //
-//  Created by Rob Amos on 6/5/2024.
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Core
 import Foundation
@@ -62,7 +68,7 @@ final class ContentViewModel {
     // MARK: - Bindings
 
     private func setupBindings(appCore: AppCore) {
-        self.accountsTask = Task.detached { [weak self] in
+        accountsTask = Task.detached { [weak self] in
             do {
                 for try await accounts in try appCore.accountsRepository.allAccounts(for: appCore.userID).removeDuplicates() {
                     if let account = accounts.first(where: { $0.product == .transacting }) {
@@ -86,7 +92,7 @@ final class ContentViewModel {
                 }
             }
         }
-        self.merchantsTask = Task.detached { [weak self] in
+        merchantsTask = Task.detached { [weak self] in
             do {
                 for try await merchants in try appCore.merchantsRepository.allMerchants(for: appCore.userID).removeDuplicates() {
                     withAnimation {
@@ -102,8 +108,8 @@ final class ContentViewModel {
     }
 
     private func setupTransactionsBindings(appCore: AppCore, account: Account) {
-        self.transactionsTask?.cancel()
-        self.transactionsTask = Task.detached { [weak self] in
+        transactionsTask?.cancel()
+        transactionsTask = Task.detached { [weak self] in
             do {
                 for try await transactions in try appCore.transactionsRepository.transactions(for: appCore.userID, account: account.id).removeDuplicates() {
                     withAnimation {
@@ -122,10 +128,10 @@ final class ContentViewModel {
     // MARK: - Helpers
 
     var transactionGroups: [TransactionGroup]? {
-        if case .success(let groups) = transactions {
-            return groups
+        if case let .success(groups) = transactions {
+            groups
         } else {
-            return nil
+            nil
         }
     }
 
@@ -139,7 +145,7 @@ final class ContentViewModel {
 
     var transferAccounts: TransferAccounts? {
         guard
-            case .success(let accounts) = allAccounts,
+            case let .success(accounts) = allAccounts,
             let source = accounts.first(where: { $0.product == .transacting }),
             let target = accounts.first(where: { $0.product == .savings })
         else {

@@ -1,9 +1,15 @@
+//===----------------------------------------------------------------------===//
 //
-//  BokCurrencyFormatStyle.swift
-//  BokBank
+// This source file is part of a technology demo for /dev/world 2024.
 //
-//  Created by Rob Amos on 6/5/2024.
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Core
 import Foundation
@@ -18,9 +24,9 @@ struct BokCurrencyFormatStyle: FormatStyle {
     func format(_ value: Money) -> String {
         // We don't show negatives, only explicit positives
         if value.amount < 0 {
-            return (value.amount * -1).formatted(.currency(code: value.currency.rawValue))
+            (value.amount * -1).formatted(.currency(code: value.currency.rawValue))
         } else {
-            return value.amount.formatted(.currency(code: value.currency.rawValue).sign(strategy: .always(showZero: false)))
+            value.amount.formatted(.currency(code: value.currency.rawValue).sign(strategy: .always(showZero: false)))
         }
     }
 

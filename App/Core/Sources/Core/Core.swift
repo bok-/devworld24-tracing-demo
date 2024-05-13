@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import Cache
 import Client
@@ -78,7 +90,7 @@ public final class AppCore: Sendable, ObservableObject {
     // MARK: - Sync Control
 
     public func startSync() async {
-        self.tracingTask.withLock {
+        tracingTask.withLock {
             $0 = Task.detached { [tracer] in
                 do {
                     try await tracer.run()
@@ -92,7 +104,7 @@ public final class AppCore: Sendable, ObservableObject {
 
     public func cancelSync() async {
         await syncClient.cancel()
-        self.tracingTask.withLock {
+        tracingTask.withLock {
             $0?.cancel()
             $0 = nil
         }
@@ -109,8 +121,8 @@ public final class AppCore: Sendable, ObservableObject {
             return logger
         }, metadataProvider: .otel())
 
-        let exporter = OTLPGRPCSpanExporter(
-            configuration: try .init(
+        let exporter = try OTLPGRPCSpanExporter(
+            configuration: .init(
                 environment: .detected(),
                 shouldUseAnInsecureConnection: true
             ),
@@ -127,7 +139,7 @@ public final class AppCore: Sendable, ObservableObject {
             processor: processor,
             environment: .detected(),
             resource: .init(attributes: [
-                "service.name": "bokbank.app"
+                "service.name": "bokbank.app",
             ])
         )
 

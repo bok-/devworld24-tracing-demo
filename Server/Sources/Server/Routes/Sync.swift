@@ -1,10 +1,22 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of a technology demo for /dev/world 2024.
+//
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
+//
+// See LICENSE for license information
+//
+// SPDX-License-Identifier: MIT
+//
+//===----------------------------------------------------------------------===//
 
 import AsyncAlgorithms
 import Hummingbird
 import HummingbirdWebSocket
 import Models
-import Storage
 import OTel
+import Storage
 import Tracing
 import TracingOpenTelemetrySemanticConventions
 
@@ -13,7 +25,7 @@ extension Router<BokRequestContext> {
     /// Registers the route to handle upgrading of /sync requests to a WebSocket, and then handle the WebSocket
     /// request to subscribe and sync any database changes.
     func registerSync(storage: StorageService) {
-        ws("/sync") { stream, writer, context in
+        ws("/sync") { _, writer, context in
 
             // We run this as a detached task because we can't use tracing here at all. It
             // throws task-local modification assertions because somewhere inside NIO or
@@ -30,10 +42,10 @@ extension Router<BokRequestContext> {
 
                     // Get a list of all of our database objects
                     let userID = context.requestContext.userID!
-                    let values = combineLatest(
-                        try storage.accountsRepository.allAccounts(for: userID),
-                        try storage.merchantsRepository.allMerchants(for: userID),
-                        try storage.transactionsRepository.allTransactions(for: userID)
+                    let values = try combineLatest(
+                        storage.accountsRepository.allAccounts(for: userID),
+                        storage.merchantsRepository.allMerchants(for: userID),
+                        storage.transactionsRepository.allTransactions(for: userID)
                     )
 
                     var previousAccounts = [Account]()

@@ -1,14 +1,13 @@
 //===----------------------------------------------------------------------===//
 //
-// This source file is part of the Hummingbird server framework project
+// This source file is part of a technology demo for /dev/world 2024.
 //
-// Copyright (c) 2023 the Hummingbird authors
-// Licensed under Apache License v2.0
+// Copyright © 2024 ANZ. All rights reserved.
+// Licensed under the MIT license
 //
-// See LICENSE.txt for license information
-// See hummingbird/CONTRIBUTORS.txt for the list of Hummingbird authors
+// See LICENSE for license information
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 //
 //===----------------------------------------------------------------------===//
 
@@ -26,7 +25,7 @@ import Tracing
 ///
 /// We forked this from Hummingbird's `TracingMiddleware` so we can add support for including the authenticated
 /// user in the attributes.
-/// 
+///
 struct BokTracingMiddleware: RouterMiddleware {
     private let headerNamesToRecord: Set<RecordingHeader>
     private let attributes: SpanAttributes?
@@ -83,7 +82,7 @@ struct BokTracingMiddleware: RouterMiddleware {
                         break
                     }
                 }
-                attributes = self.recordHeaders(request.headers, toSpanAttributes: attributes, withPrefix: "http.request.header.")
+                attributes = recordHeaders(request.headers, toSpanAttributes: attributes, withPrefix: "http.request.header.")
             }
 
             // We put the span into the context so other middleware can update attributes
@@ -93,7 +92,7 @@ struct BokTracingMiddleware: RouterMiddleware {
             do {
                 let response = try await next(request, contextCopy)
                 span.updateAttributes { attributes in
-                    attributes = self.recordHeaders(response.headers, toSpanAttributes: attributes, withPrefix: "http.response.header.")
+                    attributes = recordHeaders(response.headers, toSpanAttributes: attributes, withPrefix: "http.response.header.")
 
                     attributes["http.status_code"] = Int(response.status.code)
                     attributes["http.response_content_length"] = response.body.contentLength
@@ -102,7 +101,7 @@ struct BokTracingMiddleware: RouterMiddleware {
             } catch let error as HTTPResponseError {
                 span.attributes["http.status_code"] = Int(error.status.code)
 
-                if 500..<600 ~= error.status.code {
+                if 500 ..< 600 ~= error.status.code {
                     span.setStatus(.init(code: .error))
                 }
 
@@ -113,9 +112,11 @@ struct BokTracingMiddleware: RouterMiddleware {
 
     func recordHeaders(_ headers: HTTPFields, toSpanAttributes attributes: SpanAttributes, withPrefix prefix: String) -> SpanAttributes {
         var attributes = attributes
-        for header in self.headerNamesToRecord {
+        for header in headerNamesToRecord {
             let values = headers[values: header.name]
-            guard !values.isEmpty else { continue }
+            guard !values.isEmpty else {
+                continue
+            }
             let attribute = "\(prefix)\(header.attributeName)"
 
             if values.count == 1 {
@@ -149,7 +150,9 @@ struct RecordingHeader: Hashable {
 
 private struct HTTPHeadersExtractor: Extractor {
     func extract(key name: String, from headers: HTTPFields) -> String? {
-        guard let headerName = HTTPField.Name(name) else { return nil }
+        guard let headerName = HTTPField.Name(name) else {
+            return nil
+        }
         return headers[headerName]
     }
 }
@@ -165,7 +168,7 @@ extension Span {
     ///
     /// - Parameter update: closure used to update span attributes
     func updateAttributes(_ update: (inout SpanAttributes) -> Void) {
-        var attributes = self.attributes
+        var attributes = attributes
         update(&attributes)
         self.attributes = attributes
     }

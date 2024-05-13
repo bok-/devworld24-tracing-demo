@@ -1,0 +1,24 @@
+# Formatting
+--header //===----------------------------------------------------------------------===//\n//\n// This source file is part of a technology demo for /dev/world 2024. \n//\n// Copyright © {year} ANZ. All rights reserved.\n// Licensed under the MIT license\n//\n// See LICENSE for license information\n//\n// SPDX-License-Identifier: MIT\n//\n//===----------------------------------------------------------------------===//
+
+--self init-only
+--semicolons never
+--ifdef outdent
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes same-line
+--stripunusedargs closure-only
+
+# Disabling default rules
+--disable consecutiveBlankLines
+--disable consecutiveSpaces
+--disable spaceInsideBrackets
+--disable wrap
+--disable blankLinesAtEndOfScope
+--disable blankLinesAtStartOfScope
+
+# Enabling optional rules
+--enable blankLinesBetweenImports
+--enable blockComments
+--enable isEmpty
+--enable wrapConditionalBodies
